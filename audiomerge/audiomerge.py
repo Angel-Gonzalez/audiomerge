@@ -24,7 +24,7 @@ def main():
     # Input verifications
     if opts.join is None and opts.merge is None:
         print("Choose -j to Join 2 or more file either -m to merge those files")
-        exit(1)
+        sys.exit(1)
     if opts.output is None:
         opts.output = str(datetime.now()) + '.mp3'
     if opts.destination is None:
