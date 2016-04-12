@@ -33,17 +33,19 @@ def main():
     if opts.merge is True and opts.join is None:
         audio_list = {}
         # Read audio sequences and order it from larger to shorter
+        index = 0
         for arg in args:
             segment = AudioSegment.from_file(arg, format=str(arg).split(".")[1])
-            audio_list[int(segment.duration_seconds)] = segment
-        ordered_segments = OrderedDict(sorted(audio_list.items(), key=lambda t: t[0], reverse=True))
+            audio_list[index] = [int(segment.duration_seconds), segment]
+            index += 1
+        ordered_segments = OrderedDict(sorted(audio_list.items(), key=lambda t: t[1][0], reverse=True))
         first = True
-        for k, seg in ordered_segments.items():
+        for k, (dur, seg) in ordered_segments.items():
             if first is True:
                 # Create a silent base audio of length from the longest sequence from the loaded list
-                audio = AudioSegment.silent(duration=k * 1000)
+                audio = AudioSegment.silent(duration=dur * 1000)
                 first = False
-            audio = audio.overlay(seg)
+            audio = audio.overlay(seg.set_channels(2))
         # Save the audio results
         audio.export(opts.destination + opts.output, format=str(opts.output).split(".")[1])
         # Print the full path of the created audio file
