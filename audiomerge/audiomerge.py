@@ -36,7 +36,7 @@ def main():
         index = 0
         for arg in args:
             segment = AudioSegment.from_file(arg, format=str(arg).split(".")[1])
-            audio_list[index] = [int(segment.duration_seconds), segment]
+            audio_list[index] = [float(segment.duration_seconds), segment]
             index += 1
         ordered_segments = OrderedDict(sorted(audio_list.items(), key=lambda t: t[1][0], reverse=True))
         first = True
